@@ -10,7 +10,7 @@ def parse(url):
 
     soup = BeautifulSoup(r.text, 'html.parser')
 
-    res = {}
+    res = {'url': url}
 
     if soup.find('span', class_='item-closed-warning__content'):
         res['status'] = 'closed/unpublished'
@@ -22,6 +22,8 @@ def parse(url):
         return res
     else:
         res['status'] = 'open'
+
+    res['id'] = int(soup.find('div', class_='item-view-search-info-redesign').find('span').text.split()[1])
 
     res['title'] = soup.find('span', class_='title-info-title-text').text
 

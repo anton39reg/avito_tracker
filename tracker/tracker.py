@@ -26,3 +26,7 @@ class Tracker:
                 updates[last_info['id']] = diff
 
         return updates
+
+    def delete(self, url):
+        ads = parse(url)
+        self.history.pop(ads['id'], None)

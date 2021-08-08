@@ -7,6 +7,11 @@ name = "pypi"
 beautifulsoup4 = "*"
 requests = "*"
 cdifflib = "*"
+flask = "*"
+python-telegram-bot = "*"
+waitress = "*"
+pyngrok = "*"
+validators = "*"
 
 [dev-packages]
 

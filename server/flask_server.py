@@ -1,5 +1,6 @@
 import logging
 import sys
+
 import validators
 
 from queue import Queue
@@ -12,7 +13,7 @@ from telegram.ext import CommandHandler, CallbackQueryHandler, CallbackContext
 from telegram.ext import Dispatcher, MessageHandler, Filters
 
 from settings import TOKEN
-from ..tracker.tracker import Tracker
+from tracker import Tracker
 
 # Enable logging
 logging.basicConfig(
@@ -33,8 +34,8 @@ users_to_track = {}
 
 def start(update: Update, _: CallbackContext) -> None:
     user = update.effective_user
-
-    users_to_track[user] = Tracker()
+    user_id = update.message.from_user['id']
+    users_to_track[user_id] = Tracker()
 
     update.message.reply_markdown_v2(
         fr'Hi {user.mention_markdown_v2()}\!',
@@ -47,20 +48,20 @@ def help_command(update: Update, _: CallbackContext) -> None:
 
 
 def add_ad(update: Update, _: CallbackContext) -> None:
-    user = update.effective_user
+    user_id = update.message.from_user['id']
     url = update.message.text.split(' ')[1]
 
     if validators.url(url):
-        users_to_track[user].add(url)
+        users_to_track[user_id].add(url)
         update.message.reply_text('Добавлено для отслеживания.')
     else:
         update.message.reply_text('Не корректная ссылка.')
 
 
 def check_updates(update: Update, _: CallbackContext) -> None:
-    user = update.effective_user
+    user_id = update.message.from_user['id']
 
-    ad_updates = users_to_track[user].update()
+    ad_updates = users_to_track[user_id].update()
 
     if ad_updates:
         update.message.reply_text(ad_updates)
@@ -69,11 +70,11 @@ def check_updates(update: Update, _: CallbackContext) -> None:
 
 
 def delete_ad(update: Update, _: CallbackContext) -> None:
-    user = update.effective_user
+    user_id = update.message.from_user['id']
     url = update.message.text.split(' ')[1]
 
     if validators.url(url):
-        users_to_track[user].delete(url)
+        users_to_track[user_id].delete(url)
         update.message.reply_text('Объявление теперь не отслеживается.')
     else:
         update.message.reply_text('Не корректная ссылка.')

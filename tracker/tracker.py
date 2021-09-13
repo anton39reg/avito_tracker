@@ -1,8 +1,5 @@
-import sys
-sys.path.insert(1, '../../parser')
-
-from ..parser.urls_parser import parse
-from ..diff.calculate_diff import calculate_diff
+from parser import parse
+from diff import calculate_diff
 
 
 class Tracker:

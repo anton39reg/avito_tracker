@@ -1,5 +1,4 @@
 import difflib as dl
-import sys
 
 
 class Diff:
